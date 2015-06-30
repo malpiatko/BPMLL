@@ -74,22 +74,24 @@ public class RunExperiment {
 		return recall;
 	}
 	
-	@Override
-	public String toString(){
-		return "Learning rate " +  learningRate
-				+ ", hidden " + nHidden;
-		
-	}
-	
-	public int getEpochs(){
-		return epochs;
-	}
+
 	
 	
 	public boolean isImprovement(double recall){
 		return (epochs - maxEpoch) < 200;
 	}
 	
+	/**
+	 * Used to find the best number of hidden nodes and epochs
+	 * @param train
+	 * @param test
+	 * @param nTarget number of all binary outputs
+	 * @param mainTarget the index of the target label in the outputstructure array
+	 * @param maxEpochs
+	 * @param outputStructure array containing the number of binarypartitions in each class: eg for
+	 * [age,gender] = [1,3]
+	 * @throws Exception
+	 */
 	public static void runFullExperiment(String train, String test, int nTarget, int mainTarget,
 			int maxEpochs, int[] outputStructure) throws Exception{
 		System.out.println(train);
@@ -98,12 +100,22 @@ public class RunExperiment {
 		for(int rateIndex = 0; rateIndex < rate.length; rateIndex++){
 			for(int hIndex = 0; hIndex < hidden.length; hIndex++){
 				RunExperiment run = new RunExperiment(train, test, nTarget, mainTarget, 0, outputStructure);
-				run.runSingleTest(rate[rateIndex], hidden[hIndex], false, maxEpochs);
+				run.runSingleTest(rate[rateIndex], hidden[hIndex], maxEpochs);
 			}
 		}
 		
 	}
 	
+	/**
+	 * Rather then getting the best epochs for all 5 seeds, gets best epochs for each one
+	 * @param train
+	 * @param test
+	 * @param nTarget
+	 * @param mainTarget
+	 * @param maxEpochs
+	 * @param outputStructure
+	 * @throws Exception
+	 */
 	public static void runFullExperimentSeparate(String train, String test, int nTarget, int mainTarget,
 			int maxEpochs, int[] outputStructure) throws Exception{
 		System.out.println(train);
@@ -114,7 +126,7 @@ public class RunExperiment {
 				long seed = 1;
 				for(int i = 0; i < 5; i++, seed *=10){
 					RunExperiment run = new RunExperiment(train, test, nTarget, mainTarget, seed, outputStructure);
-					run.runSingleTest(rate[rateIndex], hidden[hIndex], false, maxEpochs);
+					run.runSingleTest(rate[rateIndex], hidden[hIndex], maxEpochs);
 				}
 				System.out.println();
 			}
@@ -122,8 +134,14 @@ public class RunExperiment {
 		
 	}
 	
-	
-	public void runSingleTest(double rate, int hidden, boolean dump, int epochs) throws Exception{
+	/**
+	 * Used to run on test
+	 * @param rate
+	 * @param hidden
+	 * @param epochs
+	 * @throws Exception
+	 */
+	public void runSingleTest(double rate, int hidden, int epochs) throws Exception{
 		setLearningRate(rate);
 		setHiddenLayers(new int[]{hidden});
 		build();
@@ -137,6 +155,20 @@ public class RunExperiment {
 		System.out.println("max epoch: " + maxEpoch + " " + maxRecall);
 	}
 	
+	/**
+	 * Used when you know number of hidden nodes and best epochs, outputs the best out of
+	 * the 5 used seeds. 
+	 * @param learning
+	 * @param hidden
+	 * @param train
+	 * @param dev
+	 * @param nTarget number of all binary outputs
+	 * @param mainTarget the index of the target label in the outputstructure array
+	 * @param epochs
+	 * @param outputStructure array containing the number of binarypartitions in each class: eg for
+	 * [age,gender] = [1,3]
+	 * @throws Exception
+	 */
 	public static void chooseSeed(double learning, int hidden, String train, String dev, int nTarget, int mainTarget,
 			int epochs, int[] outputStructure) throws Exception{
 		System.out.print(train);
@@ -148,6 +180,13 @@ public class RunExperiment {
 		}
 	}
 	
+	/**
+	 * Single experiment when all parameters known
+	 * @param rate
+	 * @param hidden
+	 * @param epochs
+	 * @throws Exception
+	 */
 	public void runSingle(double rate, int hidden,int epochs) throws Exception{
 		setLearningRate(rate);
 		setHiddenLayers(new int[]{hidden});
@@ -159,10 +198,6 @@ public class RunExperiment {
 		System.out.println(toString());
 		System.out.println(recall);
 	}
-	
-	
-	
-	
 	
 	public long getSeed() {
 		return seed;
