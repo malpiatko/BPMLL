@@ -1,7 +1,8 @@
 #Testing on multi-target BPMLL
 
 ##Requirements
-Requires jars for weka, meka and mulan
+Requires jars for weka, meka and mulan. One of the mulan packages needed to be adjusted (some variable visibilities
+so was added to src/mulan).
 
 ##How to run
 The main method is in RunExperiment. There are three methods to be used in experiments:
