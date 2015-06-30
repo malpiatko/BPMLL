@@ -23,3 +23,10 @@ no labels are present.
 *	outputStructure - array representing the structure of the targets. ith element is the number of binary targets that the
 ith class is made of, example {age, gender} -> {1,3}
 *	mainTarget - the index of main target in the outputStructure
+
+## Batch extract
+scripts/smile_extract.py provides a way to batch extract audio files and add labels. To run:
+
+	python3 scripts/smile_extract.py -f labels_csv -o output_location --arfftargets arff_targets.conf.inc wav_folder GenevaExtended.conf
+
+Note: labels should be in csv format, separated with a ";"
