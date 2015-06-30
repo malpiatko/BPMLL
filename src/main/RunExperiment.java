@@ -74,9 +74,6 @@ public class RunExperiment {
 		return recall;
 	}
 	
-
-	
-	
 	public boolean isImprovement(double recall){
 		return (epochs - maxEpoch) < 200;
 	}
@@ -134,13 +131,6 @@ public class RunExperiment {
 		
 	}
 	
-	/**
-	 * Used to run on test
-	 * @param rate
-	 * @param hidden
-	 * @param epochs
-	 * @throws Exception
-	 */
 	public void runSingleTest(double rate, int hidden, int epochs) throws Exception{
 		setLearningRate(rate);
 		setHiddenLayers(new int[]{hidden});
